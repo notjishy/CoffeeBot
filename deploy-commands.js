@@ -30,7 +30,7 @@ for (const folder of commandFolders) {
 }
 
 // construct and repair an instance of REST module
-const rest = new REST().setToken(token.token);
+const rest = new REST().setToken(token);
 
 // deplay commands
 (async () => {

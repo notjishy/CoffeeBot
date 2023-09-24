@@ -46,4 +46,4 @@ for folder in commandFolders
       console.log "[!] WARNING: The command at #{filePath} is missing a required \"data\" or \"execute\" property."
 
 # login to bot profile on discord
-client.login token.token
+client.login token
