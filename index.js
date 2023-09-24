@@ -1,3 +1,5 @@
+require('coffeescript/register')
+
 // define discord stuff
 const { Client, Collection, GatewayIntentBits } = require('discord.js');
 const client = new Client({ intents: [GatewayIntentBits.Guilds] });
@@ -9,7 +11,7 @@ const path = require('node:path');
 
 // acquire all events files
 const eventsPath = path.join(__dirname, 'events');
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js') || file.endsWith('.coffee'));
 
 for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);
@@ -27,7 +29,7 @@ const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
     const commandsPath = path.join(foldersPath, folder);
-    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js') || file.endsWith('coffee'));
 
     for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);

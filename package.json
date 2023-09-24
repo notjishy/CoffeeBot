@@ -1,8 +1,8 @@
 {
-  "name": "coffeeshopbot",
+  "name": "coffeebot",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.coffee",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,5 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "discord.js": "^14.13.0"
+  },
+  "devDependencies": {
+    "coffeescript": "^2.7.0"
   }
 }
