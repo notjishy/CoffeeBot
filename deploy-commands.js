@@ -1,3 +1,5 @@
+require('coffeescript/register');
+
 const { REST, Routes } = require('discord.js');
 const { clientId, guildId } = require('./config.json');
 const token = require('./token.json');
@@ -12,7 +14,7 @@ const commandFolders = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolders) {
     const commandsPath = path.join(foldersPath, folder);
-    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
+    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js') || file.endsWith('.coffee'));
     
     // grab SlashCommandsBuilder#toJSON() output of each command's data
     for (const file of commandFiles) {
