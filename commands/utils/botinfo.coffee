@@ -12,7 +12,7 @@ execute = (interaction) ->
   responseEmbed = new EmbedBuilder()
     .setColor interaction.member.roles.highest.color
     .setTitle 'bot info'
-    .setURL 'https://github.com/notjishy/CoffeeBot/blob/main/commands/status/ping.js'
+    .setURL 'https://github.com/notjishy/CoffeeBot/blob/main/commands/utils/botinfo.coffee'
     .setAuthor
       name: interaction.member.displayName
       iconURL: interaction.member.user.avatarURL()
