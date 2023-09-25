@@ -6,7 +6,10 @@
     "counting": {
       "requiresChatListener": true,
       "isEnabled": false,
-      "channel": "COUNTING CHANNEL ID"
+      "channel": "COUNTING CHANNEL ID",
+      "confirmNumber": "☕",
+      "denyNumber": "❌",
+      "allowRepeatUsers": false
     }
   }]
 }

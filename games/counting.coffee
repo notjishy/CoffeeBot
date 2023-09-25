@@ -1,29 +1,44 @@
 fs = require 'node:fs'
+config = require '../config.json'
+game = config.games[0].counting
 
-### @TODO: 
-add check to make sure users cannot go twice in a row
-add reactions to confirm correct numbers that saved properly, denied/incorrect numbers, etc
-###
 module.exports =
   execute: (message) ->
     try
-      countingState = fs.readFileSync('./games/counting.json', 'utf-8')
-      count = parseInt(countingState)
+      gameData = JSON.parse fs.readFileSync('./games/counting.json', 'utf-8')
     catch error
       console.error "error reading counting.json: #{error}"
       return
 
-    isInteger = not isNaN(parseInt message.content) and parseInt(message.content) is parseFloat message.content
+    # make sure user did not go twice in a row
+    if not game.allowRepeatUsers and message.author.id is gameData.latestUser
+      message.reply 'someone else must count the next number'
+      message.react game.counting.denyNumber
+      return
+
+    isInteger = not isNaN(parseInt message.content) and parseInt(message.content) is parseFloat(message.content)
+
     if isInteger
       num = parseInt(message.content)
       
-      if num is count + 1
+      if num is gameData.count + 1
+
+        newJson = { "count": num, "latestUser": message.author.id }
+
         try
-          fs.writeFileSync('./games/counting.json', JSON.stringify(num))
+          fs.writeFileSync('./games/counting.json', JSON.stringify(newJson))
           console.log "updated counting.json to #{num}"
         catch error
           console.log "error writing to counting.json: #{error}"
+          return
+        message.react game.confirmNumber
       else
-        console.log 'invalid number'
-    else
-      console.log 'message is not an integer'
+        message.reply 'incorrect number. resetting progress to 0...'
+        message.react game.denyNumber
+        newJson = { "count": 0, "latestUser": false }
+
+        try
+          fs.writeFileSync('./games/counting.json', JSON.stringify(newJson))
+        catch error
+        console.log "error writing to counting.json: #{error}"
+        return
