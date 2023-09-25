@@ -1,5 +1,12 @@
 {
   "clientId": "BOT ID",
   "guildId": "GUILD ID",
-  "guildJoinLeaveChnl": "JOIN/LEAVE CHANNEL ID"
+  "guildJoinLeaveChnl": "JOIN/LEAVE CHANNEL ID",
+  "games": [{
+    "counting": {
+      "requiresChatListener": true,
+      "isEnabled": false,
+      "channel": "COUNTING CHANNEL ID"
+    }
+  }]
 }

@@ -1,7 +1,9 @@
 # define discord stuff
 { Client, Collection, GatewayIntentBits } = require 'discord.js'
 client = new Client(intents: [
-  GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildPresences
+  GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers,
+  GatewayIntentBits.GuildPresences, GatewayIntentBits.MessageContent,
+  GatewayIntentBits.GuildMessages
 ])
 token = require './token.json'
 
