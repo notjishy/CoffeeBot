@@ -31,7 +31,7 @@ module.exports =
 
       boardEmbed = new EmbedBuilder()
         .setColor(game.embedColor)
-        .setDescription("#{reaction.message.content}\n[jump to message](https://discord.com/channels/#{reaction.message.guild.id}/#{reaction.message.channel.id}/#{reaction.message.id})")
+        .setDescription("#{reaction.message.content}\n[jump to message](#{reaction.message.url})")
         .setAuthor
           name: user.displayName
           iconURL: user.avatarURL()
