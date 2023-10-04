@@ -1,10 +1,14 @@
 # define discord stuff
-{ Client, Collection, GatewayIntentBits } = require 'discord.js'
-client = new Client(intents: [
-  GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers,
-  GatewayIntentBits.GuildPresences, GatewayIntentBits.MessageContent,
-  GatewayIntentBits.GuildMessages
-])
+{ Client, Collection, GatewayIntentBits, Partials } = require 'discord.js'
+client = new Client(
+  intents: [
+    GatewayIntentBits.Guilds, GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildPresences, GatewayIntentBits.MessageContent,
+    GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMessageReactions
+  ],
+  # allow the bot to see the following uncached data
+  partials: [Partials.User, Partials.Channel, Partials.Reaction, Partials.Message]
+)
 token = require './token.json'
 
 # define nodejs stuff

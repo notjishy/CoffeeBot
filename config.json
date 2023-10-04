@@ -10,6 +10,15 @@
       "confirmNumber": "☕",
       "denyNumber": "❌",
       "allowRepeatUsers": false
+    },
+    "starboard": {
+      "requiresChatListener": false,
+      "isEnabled": false,
+      "starboardEmoji": "⭐",
+      "allowSelfReact": true,
+      "neededReactions": 3,
+      "starboardChannel": "STARBOARD CHANNEL ID",
+      "embedColor": "#FFAA00"
     }
   }]
 }
