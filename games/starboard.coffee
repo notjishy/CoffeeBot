@@ -6,6 +6,7 @@ game = config.games[0].starboard
 module.exports =
   execute: (reaction, user) ->
     message = reaction.message
+
     # fetch uncached message if needed
     if message.partial
       try
@@ -26,8 +27,16 @@ module.exports =
       , 6500
       return
 
-    # build starboard channel embed
     if reactions.count >= game.neededReactions
+      # get guild's starboard data
+      try
+        gameData = JSON.parse fs.readFileSync('./games/starboard.json', 'utf-8')
+        board = gameData
+      catch error
+        console.error "error reading starboard.json: #{error}"
+        return
+
+      # build starboard embed
       starboardChannel = await message.guild.channels.fetch(game.starboardChannel)
 
       boardEmbed = new EmbedBuilder()
@@ -41,4 +50,20 @@ module.exports =
       attachment = message.attachments.first()?.url
       if attachment then boardEmbed.setImage(attachment)
 
-      starboardChannel.send({ content: "#{game.starboardEmoji}**#{reactions.count}**", embeds: [boardEmbed] })
+      starboardMsg = await starboardChannel.send({ content: "#{game.starboardEmoji}**#{reactions.count}**", embeds: [boardEmbed] })
+
+      # save new data
+      newJson = {
+        "authorId": user.id,
+        "channelId": message.channel.id,
+        "messageId": message.id,
+        "starboardMsgId": starboardMsg.url,
+        "stars": reactions.count
+      }
+
+      board.push(newJson)
+
+      fs.writeFile('./games/starboard.json', JSON.stringify(gameData, null, 2), (err) ->
+        if err
+          console.log err
+      )
