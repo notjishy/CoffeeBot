@@ -5,19 +5,20 @@ game = config.games[0].starboard
 
 module.exports =
   execute: (reaction, user) ->
+    message = reaction.message
     # fetch uncached message if needed
-    if reaction.message.partial
+    if message.partial
       try
-        await reaction.message.fetch()
+        await message.fetch()
       catch error
         console.error 'Error fetching message:', error
         return
 
-    reactions = reaction.message.reactions.cache.get(game.starboardEmoji)
+    reactions = message.reactions.cache.get(game.starboardEmoji)
 
     # prevent self-reactions if disallowed in config
-    if not game.allowSelfReact and reaction.message.author.id is user.id
-      response = await reaction.message.reply 'self-reactions are disabled for starboard'
+    if not game.allowSelfReact and message.author.id is user.id
+      response = await message.reply 'self-reactions are disabled for starboard'
       reactions.users.remove(user.id)
 
       setTimeout ->
@@ -27,14 +28,17 @@ module.exports =
 
     # build starboard channel embed
     if reactions.count >= game.neededReactions
-      starboardChannel = await reaction.message.guild.channels.fetch(game.starboardChannel)
+      starboardChannel = await message.guild.channels.fetch(game.starboardChannel)
 
       boardEmbed = new EmbedBuilder()
         .setColor(game.embedColor)
-        .setDescription("#{reaction.message.content}\n[jump to message](#{reaction.message.url})")
+        .setDescription("#{message.content}\n[jump to message](#{message.url})")
         .setAuthor
           name: user.displayName
           iconURL: user.avatarURL()
         .setTimestamp()
+
+      attachment = message.attachments.first()?.url
+      if attachment then boardEmbed.setImage(attachment)
 
       starboardChannel.send({ content: "#{game.starboardEmoji}**#{reactions.count}**", embeds: [boardEmbed] })
