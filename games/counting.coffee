@@ -5,15 +5,15 @@ game = config.games[0].counting
 
 module.exports =
   execute: (message) ->
-    if message.author.id is '567318008272519168'
-      message.reply 'no'
-      message.react game.denyNumber
-
     try
       gameData = JSON.parse fs.readFileSync('./games/counting.json', 'utf-8')
+      blockedUsers = JSON.parse fs.readFileSync('./games/blockedUsers.json', 'utf-8')
     catch error
-      console.error "error reading counting.json: #{error}"
+      console.error "error reading json: #{error}"
       return
+
+    for user in blockedUsers
+      return if user is message.author.id
 
     isInteger = not isNaN(parseInt message.content) and parseInt(message.content) is parseFloat(message.content)
 
