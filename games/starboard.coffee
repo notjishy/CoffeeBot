@@ -27,20 +27,22 @@ module.exports =
 starboardRemoveReaction = (message, user, reactions) ->
   if user.bot then return
 
-  if not reactions or reactions.count < game.neededReactions
-    gameData = getGameData()
+  gameData = getGameData()
 
-    for element in gameData
-      if element.channelId is message.channel.id and element.messageId is message.id
+  for element in gameData
+    if element.channelId is message.channel.id and element.messageId is message.id
+
+      if not reactions or reactions.count < game.neededReactions
         gameData.splice(element)
-
         message.guild.channels.fetch(game.starboardChannel)
           .then (channel) ->
             channel.messages.delete(element.starboardMsgId)
-        break
-      else return
-
-    saveGameData(gameData)
+        saveGameData(gameData)
+      else
+        updateStar(element, reactions, gameData, message)
+        saveGameData(gameData)
+      break
+    else return
 
 # handles gaining star reactions
 starboardAddReaction = (message, user, reactions) ->
@@ -72,6 +74,12 @@ starboardAddReaction = (message, user, reactions) ->
     attachment = message.attachments.first()?.url
     if attachment then boardEmbed.setImage(attachment)
 
+    for element in gameData
+      if element.channelId is message.channel.id and element.messageId is message.id
+        updateStar(element, reactions, gameData, message)
+        return
+      else return
+
     starboardMsg = await starboardChannel.send({ content: "#{game.starboardEmoji}**#{reactions.count}**", embeds: [boardEmbed] })
 
     # save new data
@@ -87,6 +95,17 @@ starboardAddReaction = (message, user, reactions) ->
 
     saveGameData(gameData)
   else return
+
+# edit already existing starboard message
+updateStar = (element, reactions, gameData, message) ->
+  element.stars = reactions.count
+  saveGameData(gameData)
+
+  message.guild.channels.fetch(game.starboardChannel)
+    .then (channel) ->
+      channel.messages.fetch(element.starboardMsgId)
+        .then (channel) ->
+          channel.edit({ content: "#{game.starboardEmoji}**#{reactions.count}**" })
 
 # acquires saved json data
 getGameData = () ->
