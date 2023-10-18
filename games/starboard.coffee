@@ -65,8 +65,8 @@ starboardAddReaction = (message, user, reactions) ->
       .setColor(game.embedColor)
       .setDescription("#{message.content}\n[jump to message](#{message.url})")
       .setAuthor
-        name: user.displayName
-        iconURL: user.avatarURL()
+        name: message.author.displayName
+        iconURL: message.author.avatarURL()
       .setTimestamp()
 
     attachment = message.attachments.first()?.url
@@ -76,7 +76,7 @@ starboardAddReaction = (message, user, reactions) ->
 
     # save new data
     newJson = {
-      "authorId": user.id,
+      "authorId": message.author.id,
       "channelId": message.channel.id,
       "messageId": message.id,
       "starboardMsgId": starboardMsg.id,
