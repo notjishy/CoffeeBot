@@ -14,15 +14,15 @@ module.exports =
       console.error "error reading counting.json: #{error}"
       return
 
-    # make sure user did not go twice in a row
-    if not game.allowRepeatUsers and message.author.id is gameData.latestUser
-      message.reply 'someone else must count the next number'
-      message.react game.denyNumber
-      return
-
     isInteger = not isNaN(parseInt message.content) and parseInt(message.content) is parseFloat(message.content)
 
     if isInteger
+      # make sure user did not go twice in a row
+      if not game.allowRepeatUsers and message.author.id is gameData.latestUser
+        message.reply 'someone else must count the next number'
+        message.react game.denyNumber
+        return
+
       num = parseInt(message.content)
       
       if num is gameData.count + 1
