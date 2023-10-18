@@ -1,3 +1,4 @@
+{ EmbedBuilder } = require 'discord.js'
 fs = require 'node:fs'
 config = require '../config.json'
 game = config.games[0].counting
@@ -26,8 +27,7 @@ module.exports =
       num = parseInt(message.content)
       
       if num is gameData.count + 1
-
-        newJson = { "count": num, "latestUser": message.author.id }
+        newJson = { "count": num, "highScore": gameData.highScore, "latestUser": message.author.id }
 
         try
           fs.writeFileSync('./games/counting.json', JSON.stringify(newJson))
@@ -39,10 +39,18 @@ module.exports =
       else
         message.reply 'incorrect number. resetting progress to 0...'
         message.react game.denyNumber
-        newJson = { "count": 0, "latestUser": false }
+
+        if gameData.count > gameData.highScore
+          gameData.highScore = gameData.count
+          newHighEmbed = new EmbedBuilder()
+            .setColor '#FFAA00'
+            .setTitle 'new high score'
+            .setDescription "the new counting high score is: **#{gameData.highScore}**! 🎉"
+          message.channel.send({ embeds: [newHighEmbed] })
+        newJson = { "count": 0, "highScore": gameData.highScore, "latestUser": false }
 
         try
           fs.writeFileSync('./games/counting.json', JSON.stringify(newJson))
         catch error
-        console.log "error writing to counting.json: #{error}"
+          console.log "error writing to counting.json: #{error}"
         return
