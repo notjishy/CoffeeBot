@@ -4,6 +4,10 @@ game = config.games[0].counting
 
 module.exports =
   execute: (message) ->
+    if message.author.id is '567318008272519168'
+      message.reply 'no'
+      message.react game.denyNumber
+
     try
       gameData = JSON.parse fs.readFileSync('./games/counting.json', 'utf-8')
     catch error
