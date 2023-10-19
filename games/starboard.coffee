@@ -78,9 +78,11 @@ starboardAddReaction = (message, user, reactions) ->
       if element.channelId is message.channel.id and element.messageId is message.id
         updateStar(element, reactions, gameData, message)
         return
-      else return
 
-    starboardMsg = await starboardChannel.send({ content: "#{game.starboardEmoji}**#{reactions.count}**", embeds: [boardEmbed] })
+    starboardMsg = await starboardChannel.send({
+      content: "#{game.starboardEmoji}**#{reactions.count}**",
+      embeds: [boardEmbed]
+    })
 
     # save new data
     newJson = {
@@ -92,7 +94,6 @@ starboardAddReaction = (message, user, reactions) ->
     }
 
     gameData.push(newJson)
-
     saveGameData(gameData)
   else return
 
