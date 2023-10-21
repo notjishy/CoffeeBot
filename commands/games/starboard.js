@@ -23,7 +23,10 @@ const data = new SlashCommandBuilder()
     );
 
 const execute = function(interaction){
-    if (!starboardGame.isEnabled) { interaction.reply('the starboard game is currently disabled'); }
+    if (!starboardGame.isEnabled){
+        interaction.reply('the starboard game is currently disabled');
+        return;
+    }
 
     const subCommand = interaction.options.getSubcommand();
 
