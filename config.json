@@ -19,6 +19,15 @@
       "neededReactions": 3,
       "starboardChannel": "STARBOARD CHANNEL ID",
       "embedColor": "#FFAA00"
+    },
+    "coinflip": {
+      "requiresChatListener": false,
+      "isEnabled": false,
+      "emoji": {
+        "id": "EMOJI ID",
+        "name": "EMOJI NAME",
+        "isAnimated": false
+      }
     }
   }]
 }
